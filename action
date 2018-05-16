@@ -1,0 +1,23 @@
+#! /bin/bash
+
+name="David"
+
+actionDesc="$*"
+if [[ -z $actionDesc ]]; then
+	actionDesc="desc"
+fi
+
+ver="2.0"
+
+dateStr=$(date "+%Y-%m-xx")
+
+printf "A::${ver}::${name}::${actionDesc}::I::${dateStr}::desc::\n"
+
+
+# v2.0 _ I don't recall
+# v1.3 - Add double quotes around the $*
+#      - Add braces around vars in the printf string
+# v1.2 - $* was the owner name. Is now the "actionDesc" string.
+# v1.1 - Initial version
+
+
