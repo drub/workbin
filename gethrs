@@ -88,11 +88,11 @@ grep "TIME::" $inputFile |\
           # 
           printf "\n"
           printf " WARNING: Error likely.\n"
+          printf "   Record date ...... $Date\n"
           printf "   One of the time values had a length of only 2. Should be 5.\n"
           printf "   Error likely in at least one of:: START, END, ELAPSED.\n"
           printf "   This is an indicator that the wrong format was used.\n"
           printf "   A \":\" was used instead of \".\"\n"
-          printf "   Record date: $Date\n"
           printf "\n"
         fi
 
