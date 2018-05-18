@@ -86,8 +86,6 @@ IFS=":"
 grep "CONREC::"  $searchFileName | grep -i $searchStr | \
 while read recordID junk dateStr junk recordVer junk firstStr junk lastStr junk emailStr junk phoneStr junk orgStr junk remainingStr
 
-# This was for CONREC ver 3.0
-#while read recordID junk dateStr junk recordVer junk firstStr junk lastStr junk emailStr junk phoneStr junk orgStr junk remainingStr
   do
     if [ "$debug" == "TRUE" ]; then
       echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -110,11 +108,11 @@ while read recordID junk dateStr junk recordVer junk firstStr junk lastStr junk 
     echo "   email ....... $emailStr"
 
       if [[ ! -z $remainingStr ]]; then
-        echo "     Note ........ $remainingStr"
+        echo "     Note ...... $remainingStr"
       fi
 
-    echo "     Org ......... $orgStr"
-    echo "     Created ..... $dateStr                $recordID $recordVer"
+    echo "     Org ....... $orgStr"
+    echo "     Created ... $dateStr                $recordID $recordVer"
 
   done
 
