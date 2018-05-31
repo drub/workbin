@@ -89,8 +89,8 @@ grep "TIME::" $inputFile |\
           printf "\n"
           printf " WARNING: Error likely.\n"
           printf "   Record date ...... $Date\n"
-          printf "   One of the time values had a length of only 2. Should be 5.\n"
           printf "   Error likely in at least one of:: START, END, ELAPSED.\n"
+          printf "   One of the time values had a length of only 2. Should be 5.\n"
           printf "   This is an indicator that the wrong format was used.\n"
           printf "   A \":\" was used instead of \".\"\n"
           printf "\n"
@@ -100,8 +100,8 @@ grep "TIME::" $inputFile |\
           # A qualified record has been found. Send to STDOUT.
           DashLine $seperatorLineLen
           printf " Client ...... $client\n"
-          printf " Duration .... $elapsedTime      Start: $startTime      End: $endTime\n"
           printf " Day ......... $dayOfWeek, $Date\n"
+          printf " Duration .... $elapsedTime      Start: $startTime      End: $endTime\n"
 
           if [[ $comment != "COMMENT" ]]; then
             printf " Comment ..... $comment\n"
