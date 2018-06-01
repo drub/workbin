@@ -265,14 +265,19 @@ if __name__ == "__main__":
 '''
 v 2.2
 - Added a little debug output. Minor change.
+
 v 2.1
 - Didn't record a change
+
 v 2.0
 - Fix logic for printing either Complete or Incomplete records.
+
 v 2.0
 - Add argparse() and process command line args.
+
 v 1.1
 - Add try around asssignments to catch IndexError. Helps catch malformed records.
+
 
 '''
 
