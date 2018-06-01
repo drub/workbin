@@ -35,7 +35,7 @@ debug="FALSE"   #debug
   fi
 
   printf -v line '%*s' "$length" # Build a line with $length spaces.
-  
+
   # Substitute the spaces with a dash. This gets around a dash being an
   # argument to the echo command.
   echo ${line// /-}
@@ -85,7 +85,7 @@ grep "TIME::" $inputFile |\
           # String length should be 5. If it is only 2 characters, then the
           # one of the time values entered in the timerec record  was probably
           # in the format nn:nn. It should be nn.nn.   This is an error.
-          # 
+          #
           printf "\n"
           printf " WARNING: Error likely.\n"
           printf "   Record date ...... $Date\n"
@@ -168,5 +168,3 @@ grep "TIME::" $inputFile |\
 - This version more elaborately parses time recoreds and displays records in
   a much more easily read format. Much easier to read and use when logging
   hours.
-
-Add this line. Junk. Delete later.
