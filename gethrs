@@ -127,15 +127,13 @@ grep "TIME::" $inputFile |\
 
 # ----------------------------------------
 # ----------------------------------------
-  exit  # Without this, the comment section will execute and error out.
+  exit 0  # Without this, the comment section will execute and error out.
 # ----------------------------------------
 # ----------------------------------------
 
 -------------
 -- ToDo    --
 -------------
-- Get rid of the dash line when there are no records found. If no records
-  found a single dashed line is output.
 - Get rid of using grep(). Parse the file line by line. Will make possible
   identifying the source file line number for error identification and
   reporting.
