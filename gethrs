@@ -14,6 +14,7 @@ readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David
 # ----------------------------------------
 debug="TRUE"    #debug
 debug="FALSE"   #debug
+linecount=0
 
 # ----------------------------------------
   function DashLine () {
@@ -60,6 +61,8 @@ IFS=":"
 grep "TIME::" $inputFile |\
   while read recordID junk recordVer junk dayOfWeek junk Date junk startTime junk endTime junk elapsedTime junk client junk stateStr junk comment junk remainder
   do
+    linecount=$((linecount+1))
+
     if [ "$debug" == "TRUE" ]; then
       # DEBUG information for each record.
       echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -98,7 +101,10 @@ grep "TIME::" $inputFile |\
 
         if [[ "$stateStr" == "new" ]]; then
           # A qualified record has been found. Send to STDOUT.
-          DashLine $seperatorLineLen
+          if [[ $linecount == 1 ]]; then
+            DashLine $seperatorLineLen
+          fi
+
           printf " Client ...... $client\n"
           printf " Day ......... $dayOfWeek, $Date\n"
           printf " Duration .... $elapsedTime      Start: $startTime      End: $endTime\n"
@@ -110,11 +116,12 @@ grep "TIME::" $inputFile |\
           if [[ $remainder != "" ]]; then
             printf " Remainder ... $remainder\n"
           fi
+
+          DashLine $seperatorLineLen
         fi        # if [[ $stateStr == "new" [[; then
       fi          # if [[ "$recordVer" == "4.0" ]]; then
   done            # while read recordID  ...
 
-  DashLine $seperatorLineLen
 
 
 
