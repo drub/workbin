@@ -5,7 +5,7 @@
 # ----------------------------------------
 readonly origIFS=$IFS
 readonly progVer="2.2"
-readonly seperatorLineLen=60
+readonly dashLineLength=60
 readonly uninitialized="UNINITIALIZED"
 readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
 
@@ -52,7 +52,7 @@ if [ "$debug" == "TRUE" ]; then
   # DEBUG information for the script.
   echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
   echo "++ inputFile .................... .$inputFile."
-  echo "++ seperatorLineLen ............. .$seperatorLineLen."
+  echo "++ dashLineLength ............... .$dashLineLength."
 fi
 
 # Set the delimeter for parsing the timerec records.
@@ -102,7 +102,7 @@ grep "TIME::" $inputFile |\
         if [[ "$stateStr" == "new" ]]; then
           # A qualified record has been found. Send to STDOUT.
           if [[ $linecount == 1 ]]; then
-            DashLine $seperatorLineLen
+            DashLine $dashLineLength
           fi
 
           printf " Client ...... $client\n"
@@ -117,7 +117,7 @@ grep "TIME::" $inputFile |\
             printf " Remainder ... $remainder\n"
           fi
 
-          DashLine $seperatorLineLen
+          DashLine $dashLineLength
         fi        # if [[ $stateStr == "new" [[; then
       fi          # if [[ "$recordVer" == "4.0" ]]; then
   done            # while read recordID  ...
