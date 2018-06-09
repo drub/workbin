@@ -14,7 +14,8 @@ readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David
 # ----------------------------------------
 debug="TRUE"    #debug
 debug="FALSE"   #debug
-linecount=0
+recordCount=0
+firstLinePrinted="FALSE"
 
 # ----------------------------------------
   function DashLine () {
@@ -61,7 +62,7 @@ IFS=":"
 grep "TIME::" $inputFile |\
   while read recordID junk recordVer junk dayOfWeek junk Date junk startTime junk endTime junk elapsedTime junk client junk stateStr junk comment junk remainder
   do
-    linecount=$((linecount+1))
+    recordCount=$((recordCount+1))
 
     if [ "$debug" == "TRUE" ]; then
       # DEBUG information for each record.
@@ -85,10 +86,10 @@ grep "TIME::" $inputFile |\
       if [[ "$recordVer" == "4.0" ]]; then
 
         if [[ ${#startTime} = 2 ]] || [[ ${#endTime} = 2 ]] || [[ ${#elapsedTime} = 2 ]]; then
-          # String length should be 5. If it is only 2 characters, then the
+          # String length should be 5. If it is only 2 characters, then
           # one of the time values entered in the timerec record  was probably
           # in the format nn:nn. It should be nn.nn.   This is an error.
-          #
+          # Use a dot delimter, not a colon.
           printf "\n"
           printf " WARNING: Error likely.\n"
           printf "   Record date ...... $Date\n"
@@ -101,7 +102,12 @@ grep "TIME::" $inputFile |\
 
         if [[ "$stateStr" == "new" ]]; then
           # A qualified record has been found. Send to STDOUT.
-          if [[ $linecount == 1 ]]; then
+
+          # Need to print the top dashed line for the first displayed
+          # record. Each record displayed has a following dashed line. This
+          # creates a balanced top and bottom dash line between records.
+          if [[ $firstLinePrinted == "FALSE" ]]; then
+            firstLinePrinted="TRUE"
             DashLine $dashLineLength
           fi
 
@@ -122,14 +128,12 @@ grep "TIME::" $inputFile |\
       fi          # if [[ "$recordVer" == "4.0" ]]; then
   done            # while read recordID  ...
 
-
-
-
 # ----------------------------------------
 # ----------------------------------------
   exit 0  # Without this, the comment section will execute and error out.
 # ----------------------------------------
 # ----------------------------------------
+
 
 -------------
 -- ToDo    --
@@ -138,9 +142,22 @@ grep "TIME::" $inputFile |\
   identifying the source file line number for error identification and
   reporting.
 
+
 -------------
 -- History --
 -------------
+
+# ----------------------------------------------------------------------
+# 2018-06-08
+# Version 2.3
+# Compatible with timerec version 4.0
+# ----------------------------------------------------------------------
+
+------------------------------------------------------------
+ Client ...... FireEye
+ Day ......... Mon, 2018-06-04
+ Duration .... 08.00      Start: 08.00      End: 18.00
+------------------------------------------------------------
 
 # ----------------------------------------------------------------------
 # 2018-05-14
