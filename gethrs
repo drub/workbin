@@ -4,7 +4,7 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="2.2"
+readonly progVer="2.3"
 readonly dashLineLength=60
 readonly uninitialized="UNINITIALIZED"
 readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
@@ -18,30 +18,19 @@ recordCount=0
 firstLinePrinted="FALSE"
 
 # ----------------------------------------
-  function DashLine () {
+# Libraries
 # ----------------------------------------
-# Parameters
-#   $1  Length of the dashed line.
-# Locals
-#   $length: The length of the line
-#   $line: used to construct the dashed line.
-# Globals used
-#   $debug
-# ----------------------------------------
-  length=$1
+libList="${HOME}/bin/lib/dashline"
 
-  if [ "$debug" == "TRUE" ]; then
-    # DEBUG information for the script.
-    echo "  ++ DashLine: arg 1 ............. .$1."
-    echo "  ++ DashLine: arg 2 ............. .$2."
-  fi
-
-  printf -v line '%*s' "$length" # Build a line with $length spaces.
-
-  # Substitute the spaces with a dash. This gets around a dash being an
-  # argument to the echo command.
-  echo ${line// /-}
-}
+for i in $libList; do
+    if [[ -r $i ]]; then    # Does it exist?
+        . $i                # Source the library file.
+    else
+        printf "%s\n" "ERROR: Library file not found. Could not source library file."
+        printf "%s\n" "File: $i"
+        exit
+    fi
+done
 
 # ----------------------------------------
 # ----------------------------------------
@@ -158,6 +147,16 @@ grep "TIME::" $inputFile |\
  Day ......... Mon, 2018-06-04
  Duration .... 08.00      Start: 08.00      End: 18.00
 ------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# 2018-06-15
+# Version 2.3
+# Compatible with timerec version 4.0
+# ----------------------------------------------------------------------
+- Now uses the DashLine function in a library file.
+- Add section to load libraries. Test that the lib file exists and is readable.
+  If so, source the file.
+- Remove the local DashLine function.
 
 # ----------------------------------------------------------------------
 # 2018-05-14
