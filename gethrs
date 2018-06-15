@@ -4,7 +4,7 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="2.3"
+readonly progVer="2.4"
 readonly dashLineLength=60
 readonly uninitialized="UNINITIALIZED"
 readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
@@ -137,6 +137,20 @@ grep "TIME::" $inputFile |\
 -------------
 
 # ----------------------------------------------------------------------
+# 2018-06-15
+# Version 2.4
+# Compatible with timerec version 4.0
+# ----------------------------------------------------------------------
+- Now uses the DashLine function in a library file.
+- Add section to load libraries. Test that the lib file exists and is readable.
+  If so, source the file.
+- Remove the local DashLine function.
+- Added these comments in the wrong location.
+- Corrected the script version number to 2.4 for this change set.
+  The version in the script was not updated to 2.3 as the last change set
+  described. Grrrr
+
+# ----------------------------------------------------------------------
 # 2018-06-08
 # Version 2.3
 # Compatible with timerec version 4.0
@@ -147,16 +161,6 @@ grep "TIME::" $inputFile |\
  Day ......... Mon, 2018-06-04
  Duration .... 08.00      Start: 08.00      End: 18.00
 ------------------------------------------------------------
-
-# ----------------------------------------------------------------------
-# 2018-06-15
-# Version 2.3
-# Compatible with timerec version 4.0
-# ----------------------------------------------------------------------
-- Now uses the DashLine function in a library file.
-- Add section to load libraries. Test that the lib file exists and is readable.
-  If so, source the file.
-- Remove the local DashLine function.
 
 # ----------------------------------------------------------------------
 # 2018-05-14
