@@ -1,27 +1,31 @@
 #! /bin/bash
 
-str=$*
-if [[ -z $str ]]; then
-	str="EVENT"
-fi
+readonly progVer="4.2"
 
-readonly progVer="4.1"
+
+if [[ $# = 0 ]]; then
+	argStr="EVENT"
+else
+	argStr="$*"
+fi
 
 dashline="# ----------------------------------------------------------------------"
 
 datestr=$(date "+%Y-%m-%d::%H.%M.%S::%Z::%a")
 
-printf "\n"
-printf "$dashline\n"
-printf "EVENT::$progVer::$datestr::$str::\n"
-printf "\n"
-printf "Topic: \n"
-printf "Host: \n"
-printf "Participants: \n"
-printf "\n"
-printf "\n"
-printf "$dashline\n"
-printf "\n"
+printf "%s\n"
+printf "%s\n" "$dashline"
+printf "%s\n" "EVENT::$progVer::$datestr::$argStr::"
+#printf "%s\n" "EVENT::$progVer::$datestr::\"${argSr[@]}\"::"
+#printf "%s\n" "Arg count ............... $#"    #debug
+printf "%s\n"
+printf "%s\n" "Topic: "
+printf "%s\n" "Host: "
+printf "%s\n" "Participants: "
+printf "%s\n"
+printf "%s\n"
+printf "%s\n" "$dashline"
+printf "%s\n"
 
 exit	# This prevents anything following from being executed.
 
@@ -30,12 +34,19 @@ exit	# This prevents anything following from being executed.
 ### History
 ### ======================================================================
 
-# ----------------------------------------------------------------------
-# Ver 4.1
-# 2018.05.15
-# ----------------------------------------------------------------------
-# Added "Topic", "Host", and "Participants" lines.
-# ----------------------------------------------------------------------
+----------------------------------------------------------------------
+ Ver 4.2
+ 2018.06.22
+----------------------------------------------------------------------
+- Refactoring. Identical function
+
+
+----------------------------------------------------------------------
+ Ver 4.1
+ 2018.05.15
+----------------------------------------------------------------------
+ Added "Topic", "Host", and "Participants" lines.
+----------------------------------------------------------------------
 
 
 # ----------------------------------------------------------------------
