@@ -9,9 +9,14 @@ readonly progName=$(basename $0)
 readonly uninitialized="UNINITIALIZED"
 readonly allRecords="FALSE"
 readonly defaultSearchFileName="${HOME}/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
-# Should also add to the search list
-# /Users/thedrub/cloud_storage/Dropbox\ \(Personal\)/doc/journal.txt"
 
+# ----------------------------------------
+# ToDo
+# ----------------------------------------
+# - Search multiple files in a list,using the $PATH syntax
+# - Add these to the search list
+#   /Users/thedrub/cloud_storage/Dropbox\ \(Personal\)/doc/journal.txt
+#   /Users/thedrub/Sync/Work/Agile/agile.txt"
 
 # ----------------------------------------
 # Globals
