@@ -3,7 +3,7 @@
 # ----------------------------------------
 # Constants
 # ----------------------------------------
-readonly verStr="1.0"
+readonly verStr="1.1"
 readonly uninitialized="UNINITIALIZED"
 
 # ----------------------------------------------------------------------
@@ -31,7 +31,7 @@ timeStr=$(date "+%H.%M.%S")
 
 	#echo "<remainder> .............. $*"	#debug
 
-printf "%s\n" "GNO::$verStr::$dateStr::$inputStr"
+printf "%s\n" "GNO::$verStr::$dateStr::$inputStr::"
 
 # ----------------------------------------------------------------------
 # END End end
@@ -54,6 +54,11 @@ Create a record for Guidance Not Observed (GNO)
 ----------------------------------------
  History
 ----------------------------------------
+
+----------------------------------------
+v1.1 - Add a trailing field to the record.
+       That is the "other", or "notes" field. It is free form.
+GNO::1.1::2018-07-18::GUIDANCE::
 
 ----------------------------------------
 v1.0 - Initial version
