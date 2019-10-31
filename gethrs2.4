@@ -4,8 +4,8 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="3.0"
-readonly dashLineLength=80
+readonly progVer="2.4"
+readonly dashLineLength=60
 readonly uninitialized="UNINITIALIZED"
 #readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
 readonly inputFile="/Users/thedrub/Sync/doc/journal/work/work_journal_file.txt"
@@ -34,44 +34,15 @@ for i in $libList; do
 done
 
 # ----------------------------------------
-  function PrintRecord () {
-# ----------------------------------------
-  printf " Client ...... $client\n"
-  printf " Day ......... $dayOfWeek, $Date\n"
-  printf " Duration .... $elapsedTime      Start: $startTime      End: $endTime\n"
-
-  if [[ $comment != "COMMENT" ]]; then
-    printf " Comment ..... $comment\n"
-  fi
-
-  if [[ $remainder != "" ]]; then
-    printf " Remainder ... $remainder\n"
-  fi
-  } #function
-
-
-
-# ----------------------------------------
 # ----------------------------------------
 # main Main MAIN
 # ----------------------------------------
 # ----------------------------------------
 
-# Any supplied arguments are the client of interest. Return results only
-# for this client.
-if [[ -n $* ]]; then
-  clientSearchStr="$*"
-  # Create a lower case version of the client search string.
-  clientSearchStrLower=$(echo "$clientSearchStr" | tr '[:upper:]' '[:lower:]' )
-fi
-
 if [ "$debug" == "TRUE" ]; then
   # DEBUG information for the script.
   echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
   echo "++ inputFile .................... .$inputFile."
-  echo "++ \$* ........................... .$*."
-  echo "++ \$1 ........................... .$1."
-  echo "++ clientSearchStr .............. .$clientSearchStr."
   echo "++ dashLineLength ............... .$dashLineLength."
 fi
 
@@ -120,58 +91,29 @@ grep "TIME::" $inputFile |\
         fi
 
         if [[ "$stateStr" == "new" ]]; then
-          # A qualified record has been found.
+          # A qualified record has been found. Send to STDOUT.
 
-          # The user has supplied a clientSearchStr argument.
-          if [[ -n $clientSearchStr ]]; then
-            if [ "$debug" == "TRUE" ]; then #debug
-              echo "++ clientSearchStr .............. .$clientSearchStr."
-            fi
-
-            # Want a case insensitive comparison. Convert the client string to
-            # lower case.
-            clientLower=$(echo "$client" | tr '[:upper:]' '[:lower:]' )
-
-            if [ "$debug" == "TRUE" ]; then #debug
-              echo "++ client ....................... .$client."
-              echo "++ clientLower .................. .$clientLower."
-              echo "++ clientSearchStr .............. .$clientSearchStr."
-              echo "++ clientSearchStrLower ......... .$clientSearchStrLower."
-              echo "++ Substring found! Print the record." #debug
-            fi
-
-          # If there is a clientSearchStr argument, return only entries that
-          # Return only entries that have clientSearchStrLower as a substring of the Client
-          # field, $clientLower.
-            if [[ "$clientLower" =~ .*"$clientSearchStrLower".* ]]; then
-
-              # Need to print the top dashed line for the first displayed
-              # record. Each record displayed has a following dashed line. This
-              # creates a balanced top and bottom dash line between records.
-              if [[ $firstLinePrinted == "FALSE" ]]; then
-                firstLinePrinted="TRUE"
-                DashLine $dashLineLength
-              fi
-
-              PrintRecord
-              DashLine $dashLineLength
-            fi
-
-          # No clientSearchStr argument. Print all the records.
-          else
-
-            # Need to print the top dashed line for the first displayed
-            # record. Each record displayed has a following dashed line. This
-            # creates a balanced top and bottom dash line between records.
-            if [[ $firstLinePrinted == "FALSE" ]]; then
-              firstLinePrinted="TRUE"
-              DashLine $dashLineLength
-            fi
-
-            PrintRecord
+          # Need to print the top dashed line for the first displayed
+          # record. Each record displayed has a following dashed line. This
+          # creates a balanced top and bottom dash line between records.
+          if [[ $firstLinePrinted == "FALSE" ]]; then
+            firstLinePrinted="TRUE"
             DashLine $dashLineLength
           fi
-	        
+
+          printf " Client ...... $client\n"
+          printf " Day ......... $dayOfWeek, $Date\n"
+          printf " Duration .... $elapsedTime      Start: $startTime      End: $endTime\n"
+
+          if [[ $comment != "COMMENT" ]]; then
+            printf " Comment ..... $comment\n"
+          fi
+
+          if [[ $remainder != "" ]]; then
+            printf " Remainder ... $remainder\n"
+          fi
+
+          DashLine $dashLineLength
         fi        # if [[ $stateStr == "new" [[; then
       fi          # if [[ "$recordVer" == "4.0" ]]; then
   done            # while read recordID  ...
@@ -194,20 +136,6 @@ grep "TIME::" $inputFile |\
 -------------
 -- History --
 -------------
-
-# ----------------------------------------------------------------------
-# 2019-10-30
-# Version 3.0
-# Compatible with timerec version 4.0
-# ----------------------------------------------------------------------
-- Add a search feature. When a <string> argument is supplied, results will
-  include only time records that contain the <string> in the Client field.
-- Add the PrintRecord function
-
-  Interesting to learn of bash 4.0 syntax for doing this. Simple
-  Too bad Mac Catalina is Bash 3.x
-clientLower=${client^^}
-clientSearchStrLower=${clientSearchStr^^} 
 
 # ----------------------------------------------------------------------
 # 2018-06-15

@@ -193,12 +193,6 @@ for searchFileName in $fileSearchList; do
 ** ==================== Main: $progName
 ** searchFileName .................... $searchFileName
 ** searchStr ......................... $searchStr "
-file $searchFileName
-            printf "%s\n" "\
-** ==================== Main
-"
-
-
        fi
         SearchFile "$searchFileName" "$searchStr"
     else
@@ -218,10 +212,6 @@ unset IFS
 # ----------------------------------------
 # ----------------------------------------
 
-----------------------------------------
-  History
-----------------------------------------
-
 ------------------------------------------------------------
  2018-06-20
  Version 5.0
@@ -233,7 +223,6 @@ Major refactor. Total refactor.
 - Remove the file_name command line option
 - Check for and correct a conrec ver 3.0 record
 - Display the Role information in the output
-- Almost a total rewrite
 
 ------------------------------------------------------------
  2018-06-07

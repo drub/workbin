@@ -1,6 +1,5 @@
-#! /bin/bash
 
-# Uses environment variable CONTACTSPATH
+#! /bin/bash
 
 # ----------------------------------------
 # Constants
@@ -10,68 +9,40 @@ readonly progVer="5.0"
 readonly progName=$(basename $0)
 readonly uninitialized="UNINITIALIZED"
 readonly allRecords="FALSE"
-#readonly fileSearchList="\
-#${HOME}/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt\
-#:${HOME}/Sync/Work/Agile/agile.txt\
-#"
+readonly fileSearchList="\
+${HOME}/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt\
+:${HOME}/Sync/Work/Agile/agile.txt\
+"
+
+# ----------------------------------------
+# ToDo
+# ----------------------------------------
+# - Search multiple files in a list,using the $PATH syntax
+# - Add these to the search list
+#   /Users/thedrub/cloud_storage/Dropbox\ \(Personal\)/doc/journal.txt
+#   /Users/thedrub/Sync/Work/Agile/agile.txt"
 
 # ----------------------------------------
 # Globals
 # ----------------------------------------
-debug="TRUE"
 debug="FALSE"
+debug="TRUE"
 recordCount=0
 
 
-# ----------------------------------------
-# Libraries
-# ----------------------------------------
-libList="${HOME}/bin/lib/dashline"
-
-for i in $libList; do
-    if [[ -r $i ]]; then    # Does it exist?
-        . $i                # Source the library file.
-    else
-        printf "%s\n" "ERROR: Library file not found. Could not source library file."
-        printf "%s\n" "File: $i"
-        exit
-    fi
-done
-
-
-# ----------------------------------------
-# Startup
-# ----------------------------------------
 if [ "$debug" == "TRUE" ]; then
-    printf "%s\n" "
-** ==================== Startup
-** 0 ........................ .$0.
-** 1 ........................ .$1.
-** \$* ....................... .$*.
-** progName ................. .$progName.
-** File search list ......... .$fileSearchList."
+  printf "%s\n"  "++ 0 ........................ .$0."
+  printf "%s\n"  "++ 1 ........................ .$1."
+  printf "%s\n"  "++ \$* ...................... .$*."
+  printf "%s\n"  "++ progName ................. .$progName."
+  printf "%s\n"  "++ File search list ......... .$fileSearchList."
 fi
-
-
-# ----------------------------------------
-  function Initialize () {
-# ----------------------------------------
-    # Check to assure the search path environment variable is set.
-    # If not set, then exit
-    if [[  -z ${CONTACTSPATH:-} ]]; then
-        printf "%s\n" "\
-ERROR: Environment variable not set. 
-       The CONTACTSPATH variable must contain a list of files.
-"
-       exit 1
-    fi
-}   #function
 
 
 # ----------------------------------------
   function ProgUsage () {
 # ----------------------------------------
-  printf "%s\n"  "
+  printf "%s"  "
 Syntax:
 $progName search_name [ file_name  ]
   contact -h
@@ -89,73 +60,81 @@ Version: $progVer"
 
 
 # ----------------------------------------
-  function SearchFile () {
+  function Dummy () {
 # ----------------------------------------
-# Parameters
 local fileName=$1
 local stringToFind=$2
-
 local fileBaseName=$(basename $fileName)
 
-    if [[ "$debug" == "TRUE" ]]; then
-        printf "%s\n" "\
-**** ==================== function: $FUNCNAME
-  ** fileName ............ .${fileName}.
-  ** fileBaseName ........ .${fileBaseName}.
-  ** stringToFind ........ .${stringToFind}."
-    fi
 
-grep "CONREC::" ${fileName} | grep -i ${stringToFind} | \
-    while read recordType junk recordVer junk recordDate junk firstStr junk lastStr junk emailStr junk phoneStr junk orgStr junk roleStr junk remainingStr
+}
+
+
+# ----------------------------------------
+  function SearchFile () {
+# ----------------------------------------
+local fileName=$1
+local stringToFind=$2
+local fileBaseName=$(basename $fileName)
+
+        #set -xv #debug
+debug="TRUE"    #debug
+    if [ "$debug" == "TRUE" ]; then
+        printf "%s" "
+**    function ........... SearchFile
+**    parm 1 ............. .${1}.
+**    parm 2 ............. .${2}.
+**    fileName ........... .${fileName}.
+**    fileBaseName ....... .${fileBaseName}.
+**    stringToFind ....... .${stringToFind}.
+"
+    fi
+    exit #debug
+
+# Parse CONREC version 3.0 record format
+    IFS=":"
+        #set -xv #debug
+    grep "CONREC::" ${fileName} | grep -i ${stringToFind} | \
+    while read recordType junk recordVer junk recordDate junk firstStr junk lastStr junk emailStr junk phoneStr junk orgStr junk roleStr junk remainingStr 
     do
         recordCount=$((recordCount+1))  # Increment recordCount
 
-        # There is a field order change between conrec ver 3.0 and 4.0
-        # The recordVer and recordDate order was reveresed.
-        # If recordDate = "3.0", then it is a conrec ver 3.0 format, so let's
-        # swith the values in those 2 fields.
-        if [ "$recordDate" == "3.0" ]; then
-            recordDate=${recordVer}
-            recordVer="3.0"
-        fi
-
         if [ "$debug" == "TRUE" ]; then
-            printf "%s\n" "\
-  ** recordcount ......... $recordCount
-  ** recordType .......... $recordType
-  ** recordVer ........... $recordVer
-  ** recordDate .......... $recordDate
-  ** firstStr ............ $firstStr
-  ** lastStr ............. $lastStr
-  ** emailStr ............ $emailStr
-  ** phontStr ............ $phoneStr
-  ** orgStr .............. $orgStr
-  ** roleStr ............. $roleStr
-  ** remainingStr ........ $remainingStr"
+            echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+            echo "++ recordType ......... .$recordType."
+            echo "++ recordVer .......... .$recordVer."
+            echo "++ Date ............... .$recordDate."
+            echo "++ recordVer .......... .$recordVer."
+            echo "++ firstStr ........... .$firstStr."
+            echo "++ lastStr ............ .$lastStr."
+            echo "++ emailStr ........... .$emailStr."
+            echo "++ phoneStr ........... .$phoneStr."
+            echo "++ orgStr ............. .$orgStr."
+            echo "++ roleStr ............ .$roleStr."
+            echo "++ remainingStr ....... .$remainingStr.".
         fi
 
         if [[ $recordCount == 1 ]]; then
 
-            printf "%s\n" "=========== $progName  v$progVer ========== File: $fileBaseName =========="
+            printf "%s\n" " ---------------------------------------- $progName  v$progVer -----"
+            printf "%s\n" " ---------------------------------------- $fileBaseName"
         fi
 
-        printf "%s\n" "\
-  Name ............ $firstStr $lastStr
-  Phone ........... $phoneStr
-  email ........... $emailStr"
+        echo "   Name ........ $firstStr $lastStr"
+        echo "   Phone ....... $phoneStr"
+        echo "   email ....... $emailStr"
 
         if [[ ! -z $remainingStr ]]; then
-            printf "%s\n" "    Note .......... $remainingStr"
+            echo "     Note ...... $remainingStr"
         fi
 
-        printf "%s\n" "\
-    Role, Org ..... $roleStr, $orgStr
-    Created ....... $recordDate                Record Ver: $recordVer"
+        echo "     Org ....... $orgStr"
+        echo "     Created ... $recordDate                Record Ver: $recordVer"
 
-        DashLine 65 "-"
-
+        printf "%s\n" " ------------------------------------------------------------"
+        printf "%s" "\n"
     done
-}   # function
+}
 
 
 # ----------------------------------------
@@ -164,14 +143,13 @@ grep "CONREC::" ${fileName} | grep -i ${stringToFind} | \
 # ----------------------------------------
 # ----------------------------------------
 
-Initialize
-readonly fileSearchList=$CONTACTSPATH
 
 if [[ -z $1 ]]; then
-    printf "%s\n
-ERROR: search_name not supplied.
-"
+    echo
+    echo "ERROR: search_name not supplied."
+    echo
     ProgUsage
+    printf "\n"
     exit
 else
     searchStr=$1 
@@ -183,27 +161,25 @@ else
     fi
 fi
 
-
 IFS=:
 for searchFileName in $fileSearchList; do
 
     if [ -f $searchFileName ]; then
-        if [ "$debug" == "TRUE" ]; then
-            printf "%s\n" "\
-** ==================== Main: $progName
-** searchFileName .................... $searchFileName
-** searchStr ......................... $searchStr "
-file $searchFileName
-            printf "%s\n" "\
-** ==================== Main
+        #set -xv #debug
+        #if [ "$debug" == "TRUE" ]; then
+            printf "%s" "
+++ Main
+++ searchFileName .................... $searchFileName
+++ searchStr ......................... $searchStr
 "
-
-
-       fi
-        SearchFile "$searchFileName" "$searchStr"
+        #set +xv #debug
+       #fi
+        #SearchFile "$searchFileName" "$searchStr"
+        Dummy "$searchFileName" "$searchStr"
+        #exit    #debug
     else
-        printf "%s\n" "
-ERROR: A file listed in the environment variable CONTACTSPATH does not exist.
+        printf "%s" "
+ERROR: A file registered for search does not exist
        File: $searchFileName
 "
     fi
@@ -218,22 +194,14 @@ unset IFS
 # ----------------------------------------
 # ----------------------------------------
 
-----------------------------------------
-  History
-----------------------------------------
-
 ------------------------------------------------------------
  2018-06-20
  Version 5.0
  Compatible with CONREC version 4.0
 ------------------------------------------------------------
-Major refactor. Total refactor.
+Major refactor
 - Search for the contact in a file list.
-- Read file list from the CONTACTSPATH environment variable
-- Remove the file_name command line option
-- Check for and correct a conrec ver 3.0 record
-- Display the Role information in the output
-- Almost a total rewrite
+- Remove the file_name option
 
 ------------------------------------------------------------
  2018-06-07
@@ -266,11 +234,19 @@ Added the progName variable.
 - Added to debug output
 - Added to user output
 
-----------------------------------------------------------------------
- 2018-04-20
- Version 4.0
- Compatible with CONREC version 4.0
-----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# 2018-06-19
+# Version 5.0
+# Compatible with CONREC version 4.0
+# ----------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------
+# 2018-04-20
+# Version 4.0
+# Compatible with CONREC version 4.0
+# ----------------------------------------------------------------------
 Note: There was no version 3.0 of this script. Trying to keep the record
 script and this script versions in sync. Maybe it's useful?
 
@@ -286,11 +262,11 @@ Ver 4.0 CONREC record changed. Moved ver. Added a role.
      Created ... 2018-06-07                Record Ver: 4.0
  ------------------------------------------------------------
 
-----------------------------------------------------------------------
- 2018-04-19
- Version 2.0
- Compatible with CONREC version 3.0
-----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# 2018-04-19
+# Version 2.0
+# Compatible with CONREC version 3.0
+# ----------------------------------------------------------------------
 - If the file name is not supplied, use a default search file.
     Default = cPrime.txt in the cPrime directory
 - Much more error checking on input parameters
@@ -310,11 +286,11 @@ Ver 4.0 CONREC record changed. Moved ver. Added a role.
  ------------------------------------------------------------
 
 
-----------------------------------------------------------------------
- 2018-04-17
- Version 1.0
- Compatible with CONREC version 3.0
-----------------------------------------------------------------------
+# ----------------------------------------------------------------------
+# 2018-04-17
+# Version 1.0
+# Compatible with CONREC version 3.0
+# ----------------------------------------------------------------------
 "contact dane < cPrime.txt" produces this output:
 
  -------------------------------------------------- 1.0 -----
