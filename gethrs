@@ -4,7 +4,7 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="3.0"
+readonly progVer="3.1"
 readonly dashLineLength=80
 readonly uninitialized="UNINITIALIZED"
 #readonly inputFile="/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
@@ -102,7 +102,9 @@ grep "TIME::" $inputFile |\
       echo "++ remainder .................... .$remainder."
 
     fi
-      if [[ "$recordVer" == "4.0" ]]; then
+
+      # Compatible with record versions 4.0 and 4.1
+      if [[ "${recordVer}" == "4.0" ]] || [[ "${recordVer}" == "4.1" ]]; then
 
         if [[ ${#startTime} = 2 ]] || [[ ${#endTime} = 2 ]] || [[ ${#elapsedTime} = 2 ]]; then
           # String length should be 5. If it is only 2 characters, then
@@ -178,7 +180,7 @@ grep "TIME::" $inputFile |\
 
 # ----------------------------------------
 # ----------------------------------------
-  exit 0  # Without this, the comment section will execute and error out.
+  exit 0  # Without this, the History section will execute and error out.
 # ----------------------------------------
 # ----------------------------------------
 
@@ -194,6 +196,15 @@ grep "TIME::" $inputFile |\
 -------------
 -- History --
 -------------
+
+# ----------------------------------------------------------------------
+# 2019-11.07
+# Version 3.1
+# Compatible with timerec version 4.0, 4.1
+# ----------------------------------------------------------------------
+A new timerec record version was introduced. 4.1
+Only change needed was to allow the 4.1 version to be processed. Process the
+record in the same manner as 4.0.
 
 # ----------------------------------------------------------------------
 # 2019-10-30
