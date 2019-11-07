@@ -3,7 +3,7 @@
 # ----------------------------------------
 # Constants
 # ----------------------------------------
-readonly verStr="4.0"
+readonly verStr="4.1"
 readonly uninitialized="UNINITIALIZED"
 
 # ----------------------------------------------------------------------
@@ -67,6 +67,15 @@ TIME::$verStr::$dateStr::$startStr::$endStr::$elapsedStr::$clientStr::$commentSt
 # ----------------------------------------
 
 # ----------------------------------------
+v4.1 - No code change!
+       User input changing. This is a change in data entry only.
+       Changed from: hrs.min
+       Changed to:   hrs.fraction of an hour
+
+       As an example
+       Changed from: 01.15
+       Changed to:   01.25
+
 v4.0 - Change time field seperator from ":" to ".".
        Makes parsing much easier in other scripts.
        No changes required to this script for the sepearator change. This
