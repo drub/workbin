@@ -7,6 +7,7 @@ import pandas as pd
 import sys
 import csv
 import os
+from optparse import OptionParser
 
 # ----------------------------------------------------------------------
 # My Libraries
@@ -27,9 +28,9 @@ output_file_path = "./gethrs_output.csv"
 # Constants
 # ----------------------------------------------------------------------
 prog_config = \
-    {"name"     : sys.argv[0], \
+    {"name"     : os.path.basename(sys.argv[0]), \
     "maj_ver"   : "1", \
-    "min_ver"   : "1", \
+    "min_ver"   : "2", \
     }
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
@@ -41,11 +42,17 @@ PLUS_LN_LEN = 20              # Leading line for an error
 # Intializations
 # ----------------------------------------------------------------------
 displayed_record_count = 0
-
+line_counter = 0
 
 # ----------------------------------------------------------------------
 # Functions
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+def Usage():
+# --------------------------------------------------
+    print ("Way cool useage message")
+    print (prog_config["name"])
 
 # --------------------------------------------------
 def Display_tokens(token_list):
@@ -127,18 +134,31 @@ def Display_Record(token_list):
 # Main MAIN main
 # ----------------------------------------------------------------------
 
-
-print ("++ " + prog_config["name"]  + " " + prog_config["ver"])
-debug = False
 debug = True
-
-line_counter = 0
+debug = False
 
 if debug:
-    print ("++ Program name .............. " + prog_config["name"])
-    print ("++ Program version ........... " + prog_config["ver"])
     print ('++ Number of arguments ....... ', len(sys.argv))
     print ('++ Argument List:', str(sys.argv))
+
+print ("")
+print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
+
+parser = OptionParser()
+parser.add_option("-a", action="store_true", dest="all", \
+                 help = "display all records, regarless of state")
+parser.add_option("-c", type="int", dest="rec_count", \
+                 help = "display only this number of records")
+
+(opts, args) = parser.parse_args()
+
+#print("++ options ...") #debug
+#print(opts) #debug
+
+if opts.rec_count != None: #debug
+    print("++ Option: Display " + str(opts.rec_count) + " records.") #debug
+if opts.all :
+    print("++ Option: Display all records.") #debug
 
 #exit() #debug
 
@@ -155,7 +175,6 @@ column_names=["lineno",\
               "comment",\
               "remainder"]
 df = pd.DataFrame(columns = column_names)
-#print ("++ df info", df.info) #debug
 
 with open(input_file_path, 'r') as in_fd:
     for line in in_fd:
@@ -240,8 +259,9 @@ exit()
 - Add a -a parameter, "all",  that writes to stdout records with any
   record_state and not just limited to the "a" state.
 
-- Add a -c parameter, "count", that writes a fixed number of records to stdout,
-  and not limited to the default number of records.
+- Add a -c parameter, "count", that writes the count number of records to stdout.
+  Combine with -a and "count" number of records will be displayed, regardless
+  of the record state.
 
 - Add a -w parameter, "csv count", that writes a fixed number of records
   to the csv file.  
@@ -249,6 +269,16 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 1.2
+# --------------------------------------------------
+Record versions supported: 4.1
+
+- Used argparse() to parse 2 arguments
+  - a  :: Display all records, not just rec state = "new"
+  - -c count  :: Display only this number of records.
+- Only parsed the paramters. Have not yet implemented the featues.
 
 # --------------------------------------------------
 # Ver: 1.1
