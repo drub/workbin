@@ -30,12 +30,12 @@ output_file_path = "./gethrs_output.csv"
 prog_config = \
     {"name"     : os.path.basename(sys.argv[0]), \
     "maj_ver"   : "1", \
-    "min_ver"   : "3", \
+    "min_ver"   : "4", \
     }
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
 TOKEN_COUNT_VER_4_dot_1 = 11  # The number of records in record ver 4.1
-SEP_LN_LEN = 70               # Seperator line length
+SEP_LN_LEN = 80               # Seperator line length
 PLUS_LN_LEN = 50              # Leading line for an error
 
 # ----------------------------------------------------------------------
@@ -74,9 +74,9 @@ def Display_Record(token_list):
     data_1 = 15
     col_2  = 28
     data_2 = 35
-    col_3  = 50
-    data_3 = 57
-    col_4  = 64
+    col_3  = 45
+    data_3 = 52
+    col_4  = 58
     data_4 = 65
 
     tok_line      = 0
@@ -88,7 +88,7 @@ def Display_Record(token_list):
     tok_stop      = 6
     tok_duration  = 7
     tok_client    = 8
-    tok_rec_state = 9
+    tok_state     = 9
     tok_comment   = 10
     tok_remainder = 11
 
@@ -98,6 +98,9 @@ def Display_Record(token_list):
     
     tmp_str = StrCol(tmp_str, "Line: ", col_3)
     tmp_str = StrCol(tmp_str, str(token_list[tok_line]), data_3)
+
+    tmp_str = StrCol(tmp_str, "State: ", col_4)
+    tmp_str = StrCol(tmp_str, str(token_list[tok_state]), data_4)
     print(tmp_str)
 
     # Line 2
@@ -119,11 +122,13 @@ def Display_Record(token_list):
     tmp_str = StrCol(tmp_str, token_list[tok_stop], data_3)
     print(tmp_str)
 
+    # If there is content, display the Comment field.
     if (token_list[tok_comment] != "") and (token_list[tok_comment] != "COMMENT"):
         tmp_str = StrCol(base_str, " Comment ", col_1)
         tmp_str = StrCol(tmp_str, token_list[tok_comment], data_1)
         print(tmp_str)
 
+    # If there is content, display the Remainder field.
     if token_list[tok_remainder] != "":
         tmp_str = StrCol(base_str, " Remainder ", col_1)
         tmp_str = StrCol(tmp_str, token_list[tok_remainder], data_1)
@@ -155,10 +160,10 @@ parser.add_option("-c", type="int", dest="rec_count", \
 #print("++ options ...") #debug
 #print(opts) #debug
 
-if opts.rec_count != None: #debug
-    print("++ Option: Display " + str(opts.rec_count) + " records.") #debug
 if opts.all :
     print("++ Option: Display all records.") #debug
+if opts.rec_count != None: #debug
+    print("++ Option: Display " + str(opts.rec_count) + " records.") #debug
 
 #exit() #debug
 
@@ -210,7 +215,7 @@ with open(input_file_path, 'r') as in_fd:
                 Display_tokens(tokens[1:]) # Don't print the first token.
 
             else:
-                if (record_state == "new") :
+                if (record_state == "new") or (opts.all) :
                     displayed_record_count += 1
                     # Print records not yet recorded
                     print("-" * SEP_LN_LEN)
@@ -268,6 +273,18 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 1.4
+# --------------------------------------------------
+Record versions supported: 4.1
+
+- Implement the "-a" option. Display records regardless of record state.
+  - In the past, only records with state = "new" would be displayed on STDOUT
+  - Display all records discovered
+- Modify the STDOUT messages displayed
+  - Add the record state
+  - Modify the column value. Move column 3 to the left 5 spaces.
 
 # --------------------------------------------------
 # Ver: 1.3
