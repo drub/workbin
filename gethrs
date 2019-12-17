@@ -30,7 +30,7 @@ output_file_path = "./gethrs_output.csv"
 prog_config = \
     {"name"     : os.path.basename(sys.argv[0]), \
     "maj_ver"   : "1", \
-    "min_ver"   : "4", \
+    "min_ver"   : "5", \
     }
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
@@ -151,9 +151,9 @@ print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
 
 parser = OptionParser()
 parser.add_option("-a", action="store_true", dest="all", \
-                 help = "display all records, regarless of state")
+                 help = "Display all records, regarless of state")
 parser.add_option("-c", type="int", dest="rec_count", \
-                 help = "display only this number of records")
+                 help = "Display only this number of records")
 
 (opts, args) = parser.parse_args()
 
@@ -161,7 +161,7 @@ parser.add_option("-c", type="int", dest="rec_count", \
 #print(opts) #debug
 
 if opts.all :
-    print("++ Option: Display all records.") #debug
+    print("++ Option: Display all records. Do not filter on record type.") #debug
 if opts.rec_count != None: #debug
     print("++ Option: Display " + str(opts.rec_count) + " records.") #debug
 
@@ -216,11 +216,16 @@ with open(input_file_path, 'r') as in_fd:
 
             else:
                 if (record_state == "new") or (opts.all) :
-                    displayed_record_count += 1
-                    # Print records not yet recorded
-                    print("-" * SEP_LN_LEN)
 
-                    Display_Record(tokens)
+                    if (opts.rec_count) and (displayed_record_count < opts.rec_count):
+                        print("-" * SEP_LN_LEN)
+                        Display_Record(tokens)
+                        displayed_record_count += 1
+
+                    elif not opts.rec_count :
+                        print("-" * SEP_LN_LEN)
+                        Display_Record(tokens)
+                        displayed_record_count += 1
 
                 # Add the tokens list to the end of the dataframe
                 df.loc[len(df)] = tokens
@@ -237,7 +242,7 @@ if displayed_record_count > 0:
     print(tmp_str)
     
 if len(df) == 0:
-    tmp_str = StrCol(base_str, " No reords found.", 0)
+    tmp_str = StrCol(base_str, " No records found.", 0)
     print(tmp_str)
 else:
     tmp_str = StrCol(base_str, " Records recorded ", 0)
@@ -255,17 +260,10 @@ exit()
 
 '''
 # ----------------------------------------------------------------------
-# TODO
+# TODO ToDo todo
 # ----------------------------------------------------------------------
 
 - Default to writing to csv only records for the last 2 weeks
-
-- Add a -a parameter, "all",  that writes to stdout records with any
-  record_state and not just limited to the "a" state.
-
-- Add a -c parameter, "count", that writes the count number of records to stdout.
-  Combine with -a and "count" number of records will be displayed, regardless
-  of the record state.
 
 - Add a -w parameter, "csv count", that writes a fixed number of records
   to the csv file.  
@@ -273,6 +271,15 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 1.5
+# --------------------------------------------------
+Record versions supported: 4.1
+
+- Added a -c parameter, "count", that writes the count number of records to stdout.
+  Combined with -a and "count" number of records will be displayed, regardless
+  of the record state.
 
 # --------------------------------------------------
 # Ver: 1.4
