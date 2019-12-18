@@ -8,6 +8,7 @@ import sys
 import csv
 import os
 from optparse import OptionParser
+from pathlib import Path
 
 # ----------------------------------------------------------------------
 # My Libraries
@@ -20,7 +21,6 @@ from format_str import StrCol
 # Files
 # ----------------------------------------------------------------------
 HOME = os.environ['HOME'] # Use the $HOME env variable
-input_file_path = HOME + "/Sync/doc/journal/work/work_journal_file.txt"
 output_file_path = "./gethrs_output.csv"
 
 # ----------------------------------------------------------------------
@@ -28,11 +28,13 @@ output_file_path = "./gethrs_output.csv"
 # ----------------------------------------------------------------------
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
-    "maj_ver"        : "1", \
-    "min_ver"        : "6", \
-    "sep_ln_len"     : 80,    # Dashed line between displayed recs \
-    "plus_ln_len"    : 50,    # Line preceeding an error message \
-    "rec_4.1_tokens" : 11 \
+     "maj_ver"        : "2", \
+     "min_ver"        : "0", \
+     "sep_ln_len"     : 80,    # Dashed line between displayed recs \
+     "plus_ln_len"    : 50,    # Line preceeding an error message \
+     "rec_4.1_tokens" : 11, \
+     "env_var"        : "GETHRSPATH", \
+     "ofname"         : "./gethrs_output.csv" \
     }
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
@@ -47,17 +49,29 @@ line_counter = 0
 # ----------------------------------------------------------------------
 
 # --------------------------------------------------
-def Display_file_info():
+def Display_file_info(f_list):
 # --------------------------------------------------
 # A debug function to display files used.
-    base_str = "." * 100
-    tmp_str = StrCol(base_str, "++ input_file_path ", 0)
-    tmp_str = StrCol(tmp_str, input_file_path, 25 )
-    print (tmp_str)
+    count = 0 #debug
+    if isinstance(f_list, list):
+        #print("++++++ Found list" ) #debug
+        for fname in f_list:
+            count += 1
+            base_str = "." * 100
+            tmp_str = StrCol(base_str, "++ Input file ", 0)
+            tmp_str = StrCol(tmp_str, fname, 25 )
+            print (tmp_str)
+    elif isinstance(f_list, str):
+        #print("++++++ Found str" ) #debug
+        base_str = "." * 100
+        tmp_str = StrCol(base_str, "++ Input file ", 0)
+        tmp_str = StrCol(tmp_str, f_list, 25 )
+        print (tmp_str)
 
+    print("++ Count: " + str(count)) #debug
     base_str = "." * 100
-    tmp_str = StrCol(base_str, "++ output_file_path ", 0)
-    tmp_str = StrCol(tmp_str, output_file_path, 25 )
+    tmp_str = StrCol(base_str, "++ Output file ", 0)
+    tmp_str = StrCol(tmp_str, prog_config["ofname"], 25 )
     print (tmp_str)
 
 # --------------------------------------------------
@@ -156,17 +170,28 @@ def Closing_message(display_count, record_count):
     if display_count > 0:
         print("-" * prog_config["sep_ln_len"])
     
-        tmp_str = StrCol(base_str, " Records displayed ", 0)
+        tmp_str = StrCol(base_str, "Records displayed ", 0)
         tmp_str = StrCol(tmp_str, str(display_count), data_col)
         print(tmp_str)
 
     if record_count == 0:
-        tmp_str = StrCol(base_str, " No records found.", 0)
+        tmp_str = StrCol(base_str, "No records found.", 0)
         print(tmp_str)
     else:
-        tmp_str = StrCol(base_str, " Records recorded ", 0)
+        tmp_str = StrCol(base_str, "Records recorded ", 0)
         tmp_str = StrCol(tmp_str, str(record_count), data_col)
         print(tmp_str)
+
+# --------------------------------------------------
+def Get_Input_Files(fname):
+# --------------------------------------------------
+    if fname in os.environ:
+        # The ENV variable exists. Return the file list.
+        return (os.environ[fname])
+    else:
+        print("Error: Environment variable not set: " + fname)
+        print("Excecution halted ...")
+        exit()
 
 
 # ----------------------------------------------------------------------
@@ -176,13 +201,18 @@ def Closing_message(display_count, record_count):
 debug = True
 debug = False
 
+print ("")
+print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
+
+input_file_list = Get_Input_Files(prog_config["env_var"])
+#print("++++ " + input_file_list) #debug
+
+debug = True
+debug = False
 if debug :
     print ('++ Number of arguments ....... ', len(sys.argv))
     print ('++ Argument List:', str(sys.argv))
-    Display_file_info()
-
-print ("")
-print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
+    Display_file_info(input_file_list)
 
 # Initialize the options parser
 parser = OptionParser()
@@ -191,6 +221,7 @@ parser.add_option("-a", action="store_true", dest="all", \
 parser.add_option("-c", type="int", dest="rec_count", \
                  help = "Display only this number of records")
 
+# Collection the options passed.
 (opts, args) = parser.parse_args()
 
 #print("++ options ...") #debug
@@ -215,7 +246,15 @@ column_names=["lineno",\
               "remainder"]
 df = pd.DataFrame(columns = column_names)
 
-with open(input_file_path, 'r') as in_fd:
+# for file in input_file_names:
+    #   if file.is_file():
+#          ( Get_time_records(file)
+#       else:
+    #       print("++ File not found. Continue execution. File: " + file)
+    #
+
+# def Get_time_records(file)
+with open(str(input_file_list), 'r') as in_fd:
     for line in in_fd:
         line = line.rstrip('\r\n') # Strip the trailing EOL
         line_counter += 1
@@ -225,7 +264,7 @@ with open(input_file_path, 'r') as in_fd:
 
         if (tokens[0] == "TIME") :
 
-            # A TIME:: record was found.
+            # A "TIME" record was found.
             # Process token for record version 4.1 only
             # Deprecate earlier record versions with this new implementation
 
@@ -262,6 +301,11 @@ with open(input_file_path, 'r') as in_fd:
                 # Add the tokens list to the end of the dataframe
                 df.loc[len(df)] = tokens
 
+# Write the dataframe to a CSV file.
+df.to_csv(output_file_path, index = False)
+
+#print("len(df): " + str(len(df))) #debug
+# return(displayed_record_count, records_stored)
 
 Closing_message(displayed_record_count, len(df))
 
@@ -277,12 +321,14 @@ exit()
 # TODO ToDo todo
 # ----------------------------------------------------------------------
 
-- Read an environment variable for input files. Like the PATH variable
-  behavior, read from each file in a colon separated list.
+- When multiple input files are processed, create multiple CSV files
+  Gotta figure out he output file naming scheme.
+
+- Read a file list from the ENV file. Now, only a single file.
 
 - Add a -i <file> option. Read records from this file.
 
-- Default to writing to csv only records for the last 2 weeks
+- Default to writing to csv only records for the last N weeks 4?
 
 - Add a -w parameter, "csv count", that writes a fixed number of records
   to the csv file.
@@ -292,12 +338,29 @@ exit()
 # ----------------------------------------------------------------------
 
 # --------------------------------------------------
+# Ver: 2.0
+# --------------------------------------------------
+Record versions supported: 4.1
+
+- Fixed: Accidentally deleted the write to a CSV in some prior version.
+  Now properly writes the CSV again. Sheesh!
+- Lots of refactoring and cleaning.
+- Now reading the input file from an ENV variable.
+  For now, a single file is processed. In future versions, it will be a list.
+- Wrote a function for displaying input and output file information.
+- Added pseudo code for when multiple input files are read.
+- Added function Get_Input_Files to get file names from Env variable.
+
+# --------------------------------------------------
 # Ver: 1.6
 # --------------------------------------------------
 Record versions supported: 4.1
 
-- Lots of cleanup. No new features.
-- Added a record version value to the record seperator dashed line.
+Lots and lots of cleanup.
+- Added to prog_config and eliminated several constants
+- Created a Display_file function for debugging when an ENV var is implemented for file input
+- Added a record ver indicator to the dashed separator line
+- Simplified Main by creating a Closing_message function
 
 # --------------------------------------------------
 # Ver: 1.5
