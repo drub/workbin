@@ -21,7 +21,6 @@ from format_str import StrCol
 # Files
 # ----------------------------------------------------------------------
 HOME = os.environ['HOME'] # Use the $HOME env variable
-output_file_path = "./gethrs_output.csv"
 
 # ----------------------------------------------------------------------
 # Constants
@@ -29,12 +28,12 @@ output_file_path = "./gethrs_output.csv"
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
      "maj_ver"        : "2", \
-     "min_ver"        : "0", \
+     "min_ver"        : "1", \
      "sep_ln_len"     : 80,    # Dashed line between displayed recs \
      "plus_ln_len"    : 50,    # Line preceeding an error message \
      "rec_4.1_tokens" : 11, \
      "env_var"        : "GETHRSPATH", \
-     "ofname"         : "./gethrs_output.csv" \
+     "ofname"         : HOME + "/spool/gethrs_output.csv" \
     }
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
@@ -68,7 +67,7 @@ def Display_file_info(f_list):
         tmp_str = StrCol(tmp_str, f_list, 25 )
         print (tmp_str)
 
-    print("++ Count: " + str(count)) #debug
+    #print("++ Count: " + str(count)) #debug
     base_str = "." * 100
     tmp_str = StrCol(base_str, "++ Output file ", 0)
     tmp_str = StrCol(tmp_str, prog_config["ofname"], 25 )
@@ -112,7 +111,7 @@ def Display_Record(token_list):
     tok_comment   = 10
     tok_remainder = 11
 
-    # Display a diashed line with the record version.
+    # Display a dashed line with the record version.
     line_str = "-" * prog_config["sep_ln_len"]
     line_str = StrCol(line_str, " v ", 70)
     line_str = StrCol(line_str, token_list[tok_rec_ver], 72)
@@ -183,7 +182,7 @@ def Closing_message(display_count, record_count):
         print(tmp_str)
 
 # --------------------------------------------------
-def Get_Input_Files(fname):
+def Get_Env_File(fname):
 # --------------------------------------------------
     if fname in os.environ:
         # The ENV variable exists. Return the file list.
@@ -204,7 +203,8 @@ debug = False
 print ("")
 print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
 
-input_file_list = Get_Input_Files(prog_config["env_var"])
+input_file_list = Get_Env_File(prog_config["env_var"])
+
 #print("++++ " + input_file_list) #debug
 
 debug = True
@@ -302,7 +302,7 @@ with open(str(input_file_list), 'r') as in_fd:
                 df.loc[len(df)] = tokens
 
 # Write the dataframe to a CSV file.
-df.to_csv(output_file_path, index = False)
+df.to_csv(prog_config["ofname"], index = False)
 
 #print("len(df): " + str(len(df))) #debug
 # return(displayed_record_count, records_stored)
@@ -324,9 +324,14 @@ exit()
 - When multiple input files are processed, create multiple CSV files
   Gotta figure out he output file naming scheme.
 
+- The whole CSV output file management needs to be designed.
+  Add a "-o <filename>" option to specify the CSV file name.
+  Otherwise file name like <yr>-<mo>-<day>_<sequence no>_gethrs.csv
+
 - Read a file list from the ENV file. Now, only a single file.
 
-- Add a -i <file> option. Read records from this file.
+- Add a -i <file> option. Read records from this file instead of the
+  ENV variable.
 
 - Default to writing to csv only records for the last N weeks 4?
 
@@ -336,6 +341,17 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 2.1
+# --------------------------------------------------
+Record versions supported: 4.1
+
+- Changed Get_Input_Files to Get_Env_File. Better reflection of what it does.
+- There were multiple ways of identifying the output file name. Cleaned things
+  up to consistently use the prog_config structure: prog_config["ofname"]
+- Output file now writtend to the $HOME/spool directory. Was being scattered
+  all over the FS by writing to the CWD.
 
 # --------------------------------------------------
 # Ver: 2.0
