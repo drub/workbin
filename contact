@@ -10,10 +10,6 @@ readonly progVer="5.0"
 readonly progName=$(basename $0)
 readonly uninitialized="UNINITIALIZED"
 readonly allRecords="FALSE"
-#readonly fileSearchList="\
-#${HOME}/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt\
-#:${HOME}/Sync/Work/Agile/agile.txt\
-#"
 
 # ----------------------------------------
 # Globals
@@ -217,6 +213,12 @@ unset IFS
   exit	# Without this, the comment section will execute and error out.
 # ----------------------------------------
 # ----------------------------------------
+
+----------------------------------------
+  ToDo todo TODO
+----------------------------------------
+- Only display fields with entered values. Do not display fields with the
+  default value.
 
 ----------------------------------------
   History
