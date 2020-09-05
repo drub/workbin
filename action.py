@@ -4,13 +4,13 @@
 import sys
 import argparse
 
-progVersion = "2.2"
+progVersion = "3.0"
 dashLineLength = 70
 
-debug = 0
-debug = 1
 debug = 2
 debug = 3
+debug = 0
+debug = 1
 
 
 # debug = 4
@@ -27,7 +27,8 @@ def openFile(fname):
     # print '-- File to open: %s ' % fname  #debug
     try:
         FH = open(fname)
-        print '-- File opened: %s' % fname  # debug
+        if debug > 0:
+            print '-- File opened: %s' % fname  # debug
     except IOError:
         print "ERROR: Input file not found: ", fname
         return False
@@ -72,8 +73,9 @@ class Record:
 
         fields = line.split("::")
         fieldCount = len(fields)
-        print "++ init fieldCount: ", fieldCount  # debug
-        print "++ init fields: ", fields  # debug
+        if debug > 1:
+            print "++ init fieldCount: ", fieldCount  # debug
+            print "++ init fields: ", fields  # debug
 
         if fieldCount == 1:
             lineTokens = line.split()
@@ -96,8 +98,12 @@ class Record:
             # Action records
             if self.recordType == self.actionRecordType:
                 self.recordVer = fields[1]
+
                 if debug > 0:
-                    print "++ self.recordVer: ", self.recordVer  # debug
+                    print "++ Action record found"
+                    print "   ++ self.lineNo ....... ", self.lineNo  # debug
+                    print "   ++ self.recordVer .... ", self.recordVer  # debug
+
                 if (self.recordVer == "2.0") or (self.recordVer == "1.1") \
                         or (self.recordVer == "1.2"):
                     try:
@@ -111,6 +117,17 @@ class Record:
                         print "[%05i] ERROR: Malformed record. Type: %s   Ver: %s" \
                               % (self.lineNo, self.recordType, self.recordVer)
                         print "[%05i] %s" % (self.lineNo, line)
+                elif (self.recordVer == "3.0"):
+                    try:
+                        self.state = fields[2]
+                        self.startDate = fields[4]
+                        self.completeDesc = fields[5]
+                    except (IndexError):
+                        dashline(dashLineLength)
+                        print "[%05i] ERROR: Malformed record. Type: %s   Ver: %s" \
+                              % (self.lineNo, self.recordType, self.recordVer)
+                        print "[%05i] %s" % (self.lineNo, line)
+
                 else:
                     # There was no version indicator in version 1 records.
                     try:
@@ -125,6 +142,9 @@ class Record:
                               % (self.lineNo, self.recordType, self.recordVer)
                         print "[%05i] %s" % (self.lineNo, line)
 
+                if debug > 0:
+                    print "   ++ self.state ........ ", self.state  # debug
+
             # Event records
             elif self.recordType == self.eventRecordType:
                 self.eventName = fields[3]
@@ -132,17 +152,11 @@ class Record:
             # Date records
             elif self.recordType == self.dateRecordType:
                 dateTokens = fields[3].split('-')
-                print "++ Date record:     ", dateTokens  # debug
-                self.date = dateTokens[0]
-                self.time = dateTokens[1]
-                self.timeZone = dateTokens[2]
-                self.day = dateTokens[3]
-
-                print "dateTokens ............. %s" % (dateTokens)  # debug
-                print "date ................... %s" % (self.date)  # debug
-                print "time ................... %s" % (self.time)  # debug
-                print "timeZone ............... %s" % (self.timeZone)  # debug
-                print "day  ................... %s" % (self.day)  # debug
+                if debug == 3:
+                    print "++ Date record:     ", dateTokens
+                    self.date = dateTokens[0]
+                    self.time = dateTokens[1]
+                    self.timeZone = dateTokens[2]
 
     def display(self):
         # --------------------------------------------------
@@ -202,8 +216,14 @@ def main():
                        help='Display completed actions')
     prog_args = parser.parse_args()
 
+    if debug > 0:
+        print ('++++++++++++++++++++++++++++++++++++++')
+        print ('+++++ Debug Mode +++++ Level = %i +++++' % debug)
+        print ('++++++++++++++++++++++++++++++++++++++')
+
     inputFileName = "junk"
-    inputFileName = "/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
+    #inputFileName = "/Users/thedrub/cloud_storage/Dropbox (cPrime Inc.)/for David Bacon/cPrime.txt"
+    inputFileName = "/Users/thedrub/Sync/doc/journal/work/journal_work.txt"
     inputFileFH = openFile(inputFileName)
 
     if debug > 0:
@@ -218,7 +238,7 @@ def main():
         lineCount += 1
         line = line.rstrip()
 
-        if debug > 0:
+        if debug > 1:
             print "[%05i] %s" % (lineCount, line)
 
         rec = Record(line, lineCount, currentDate)
@@ -261,15 +281,34 @@ def main():
             print "[%05i] Owner: %-20s Open: %s" % (rec.lineNo, rec.owner, rec.openDate)
             print "        Desc:  %s" % (rec.desc)
 
-        if debug > 2:
+        #if debug > 2:
 
 
 
 # ------------------------------------------------------------
 if __name__ == "__main__":
+    # execute only if run as a script
     main()
 # ------------------------------------------------------------
-'''
+''' Do not execute the following lines. Make it a comment.
+
+--------------------------------------------------------------------------------
+v 3.0
+Major refactor in many areas
+
+- The "state" field must be one of
+  I - Incomplete
+  C - Complete
+  N - Will not be completed
+
+- Added support for the 3.0 record type
+- Refined the debug output. Has 4 levels
+  0 - No debug
+  1 - Brief debug output
+  2 - Include more extensive tokens, fields
+  3 - Include parse info for every input line
+  
+--------------------------------------------------------------------------------
 v 2.2
 - Added a little debug output. Minor change.
 

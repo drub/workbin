@@ -28,7 +28,7 @@ HOME = os.environ['HOME'] # Use the $HOME env variable
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
      "maj_ver"        : "2", \
-     "min_ver"        : "2", \
+     "min_ver"        : "3", \
      "sep_ln_len"     : 80,    # Dashed line between displayed recs \
      "plus_ln_len"    : 50,    # Line preceeding an error message \
      "rec_4.1_tokens" : 11, \
@@ -181,6 +181,10 @@ def Closing_message(display_count, record_count):
         tmp_str = StrCol(tmp_str, str(record_count), data_col)
         print(tmp_str)
 
+        tmp_str = StrCol(base_str, "Output file ", 0)
+        tmp_str = StrCol(tmp_str, str(prog_config["ofname"]), data_col)
+        print(tmp_str)
+
 # --------------------------------------------------
 def Get_Env_File(fname):
 # --------------------------------------------------
@@ -191,7 +195,6 @@ def Get_Env_File(fname):
         print("Error: Environment variable not set: " + fname)
         print("Excecution halted ...")
         exit()
-
 
 # ----------------------------------------------------------------------
 # Main MAIN main
@@ -341,6 +344,13 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 2.3
+# --------------------------------------------------
+Record versions supported: 4.1
+
+Added output path and file name to stdout when records are written.
 
 # --------------------------------------------------
 # Ver: 2.2
