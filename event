@@ -1,6 +1,7 @@
 #! /bin/bash
 
-readonly progVer="4.2"
+readonly progVer="4.3"
+readonly employer="Cprime"
 
 
 if [[ $# = 0 ]]; then
@@ -21,7 +22,9 @@ printf "%s\n" "EVENT::$progVer::$datestr::$argStr::"
 printf "%s\n"
 printf "%s\n" "Topic: "
 printf "%s\n" "Host: "
-printf "%s\n" "Participants: "
+printf "%s\n" "${employer} Participants: "
+printf "%s\n" "Client Participants: "
+printf "%s\n" "References: "
 printf "%s\n"
 printf "%s\n"
 printf "%s\n" "$dashline"
@@ -33,6 +36,13 @@ exit	# This prevents anything following from being executed.
 ### ======================================================================
 ### History
 ### ======================================================================
+
+----------------------------------------------------------------------
+ Ver 4.3
+ 2020.10.14
+----------------------------------------------------------------------
+- Split the "Participants:" into "Cprime Participants" and "Client Particpants"
+- Add "References:"
 
 ----------------------------------------------------------------------
  Ver 4.2
