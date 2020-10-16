@@ -1,6 +1,6 @@
 #! /bin/bash
 
-readonly progVer="4.3"
+readonly progVer="4.4"
 readonly employer="Cprime"
 
 
@@ -20,11 +20,11 @@ printf "%s\n" "EVENT::$progVer::$datestr::$argStr::"
 #printf "%s\n" "EVENT::$progVer::$datestr::\"${argSr[@]}\"::"
 #printf "%s\n" "Arg count ............... $#"    #debug
 printf "%s\n"
-printf "%s\n" "Topic: "
-printf "%s\n" "Host: "
-printf "%s\n" "${employer} Participants: "
-printf "%s\n" "Client Participants: "
-printf "%s\n" "References: "
+printf "%s\n" "Topic:: "
+printf "%s\n" "Host:: "
+printf "%s\n" "${employer} Participants:: "
+printf "%s\n" "Client Participants:: "
+printf "%s\n" "References:: "
 printf "%s\n"
 printf "%s\n"
 printf "%s\n" "$dashline"
@@ -38,6 +38,13 @@ exit	# This prevents anything following from being executed.
 ### ======================================================================
 
 ----------------------------------------------------------------------
+ Ver 4.4
+ 2020.10.16
+----------------------------------------------------------------------
+- Change ":" to "::". Should make later parsing easier.
+  Anticipate <field> :: <value> semantics.
+
+----------------------------------------------------------------------
  Ver 4.3
  2020.10.14
 ----------------------------------------------------------------------
@@ -49,7 +56,6 @@ exit	# This prevents anything following from being executed.
  2018.06.22
 ----------------------------------------------------------------------
 - Refactoring. Identical function
-
 
 ----------------------------------------------------------------------
  Ver 4.1
