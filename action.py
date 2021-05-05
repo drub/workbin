@@ -288,7 +288,9 @@ def main():
 # ------------------------------------------------------------
 if __name__ == "__main__":
     # execute only if run as a script
+    print("Being executed directly ......")
     main()
+
 # ------------------------------------------------------------
 ''' Do not execute the following lines. Make it a comment.
 

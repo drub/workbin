@@ -6,7 +6,7 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="5.0"
+readonly progVer="6.0"
 readonly progName=$(basename $0)
 readonly uninitialized="UNINITIALIZED"
 readonly allRecords="FALSE"
@@ -77,10 +77,16 @@ Where
   file_name is a file to search.
 
 Defaults
-  A file list is stored in a variable in the script.
+  A file list is stored in the environment variable \$CONTACTSPATH
+"
 
-Version: $progVer"
-
+}	# function
+# ----------------------------------------
+  function PrintVer () {
+# ----------------------------------------
+    printf "%s\n" "
+ver. $progVer
+"
 }	# function
 
 
@@ -130,8 +136,36 @@ grep "CONREC::" ${fileName} | grep -i ${stringToFind} | \
   ** remainingStr ........ $remainingStr"
         fi
 
+        # Make it a bit more pretty if the value is empty.
+        if [[ "${firstStr}" = "FIRST" ]]; then
+            firstStr="<empty>"
+        fi
+
+        if [[ "${lastStr}" = "LAST" ]]; then
+            lastStr="<empty>"
+        fi
+
+        if [[ "${emailStr}" = "EMAIL" ]]; then
+            emailStr="<empty>"
+        fi
+
+        if [[ "${phoneStr}" = "PHONE" ]]; then
+            phoneStr="<empty>"
+        fi
+
+        if [[ "${orgStr}" = "COMPANY" ]]; then
+            orgStr="<empty>"
+        fi
+
+        if [[ "${roleStr}" = "ROLE" ]]; then
+            roleStr="<empty>"
+        fi
+
+
         if [[ $recordCount == 1 ]]; then
 
+            # Print a banner for each file searched.
+            # Makes clear the diplayed record's source.
             printf "%s\n" "=========== $progName  v$progVer ========== File: $fileBaseName =========="
         fi
 
@@ -168,6 +202,7 @@ if [[ -z $1 ]]; then
 ERROR: search_name not supplied.
 "
     ProgUsage
+    PrintVer
     exit
 else
     searchStr=$1 
@@ -175,7 +210,6 @@ else
     # See if a Usage message was requested, the "-h" flag
     if [[ "${searchStr}" = "-h" ]]; then
         ProgUsage
-        exit
     fi
 fi
 
@@ -196,7 +230,16 @@ file $searchFileName
 
 
        fi
-        SearchFile "$searchFileName" "$searchStr"
+
+       # If the help, "-h", flag was supplied
+       if [[ "${searchStr}" = "-h" ]]; then
+           # Print each file name in the env variable.
+           printf "%s\n" "\
+  $searchFileName"
+       else
+           # Help flad not supplied. Perform the search on each file.
+           SearchFile "$searchFileName" "$searchStr"
+       fi
     else
         printf "%s\n" "
 ERROR: A file listed in the environment variable CONTACTSPATH does not exist.
@@ -206,10 +249,12 @@ ERROR: A file listed in the environment variable CONTACTSPATH does not exist.
 done
 unset IFS
 
+PrintVer
 
 
 # ----------------------------------------
 # ----------------------------------------
+# EXIT Exit exit
   exit	# Without this, the comment section will execute and error out.
 # ----------------------------------------
 # ----------------------------------------
@@ -217,12 +262,23 @@ unset IFS
 ----------------------------------------
   ToDo todo TODO
 ----------------------------------------
-- Only display fields with entered values. Do not display fields with the
-  default value.
 
 ----------------------------------------
   History
 ----------------------------------------
+
+------------------------------------------------------------
+ Program: contact
+ Date: 2021-01-16
+ Version: 6.0
+ Compatible with CONREC record version 4.0
+------------------------------------------------------------
+- Added to the help, -h, output.
+  Display the files listed in the $CONTATSPATH env variable.
+- If a field is the default value, then change the output to "<empty>"
+  So the string "FIRST" gets changed to "<empty>". Same for LAST, 
+  PHONE, EMAIL. 
+  The output record formatremain constant and easier to view..
 
 ------------------------------------------------------------
  2018-06-20
