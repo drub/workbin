@@ -28,7 +28,7 @@ HOME = os.environ['HOME'] # Use the $HOME env variable
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
      "maj_ver"        : "2", \
-     "min_ver"        : "3", \
+     "min_ver"        : "4", \
      "sep_ln_len"     : 80,    # Dashed line between displayed recs \
      "plus_ln_len"    : 50,    # Line preceeding an error message \
      "rec_4.1_tokens" : 11, \
@@ -163,27 +163,33 @@ def Display_Record(token_list):
 # --------------------------------------------------
 def Closing_message(display_count, record_count):
 # --------------------------------------------------
-    base_str = "." * 24 + " " * 50
+    base_str = "." * 24 + " "
     data_col = 25
 
     if display_count > 0:
         print("-" * prog_config["sep_ln_len"])
     
+        # Output the input file name.
+        tmp_str = StrCol(base_str, "Input file ", 0)
+        print(tmp_str, end = '')    # Supress newline)
+        print(input_file_list)
+
         tmp_str = StrCol(base_str, "Records displayed ", 0)
-        tmp_str = StrCol(tmp_str, str(display_count), data_col)
-        print(tmp_str)
+        print(tmp_str, end = '')    # Supress newline)
+        print(display_count)
 
     if record_count == 0:
         tmp_str = StrCol(base_str, "No records found.", 0)
         print(tmp_str)
     else:
+
         tmp_str = StrCol(base_str, "Records recorded ", 0)
-        tmp_str = StrCol(tmp_str, str(record_count), data_col)
-        print(tmp_str)
+        print(tmp_str, end = '')    # Supress newline)
+        print(record_count)
 
         tmp_str = StrCol(base_str, "Output file ", 0)
-        tmp_str = StrCol(tmp_str, str(prog_config["ofname"]), data_col)
-        print(tmp_str)
+        print(tmp_str, end = '')    # Supress newline)
+        print( prog_config["ofname"])
 
 # --------------------------------------------------
 def Get_Env_File(fname):
@@ -232,7 +238,7 @@ parser.add_option("-c", type="int", dest="rec_count", \
 
 if opts.all :
     print("++ Option: Display all records. Not filtered \"State\" field.")
-if opts.rec_count != None: #debug
+if opts.rec_count != None:
     print("++ Option: Display " + str(opts.rec_count) + " records.")
 
 column_names=["lineno",\
@@ -344,6 +350,17 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# Ver: 2.4
+# --------------------------------------------------
+Record versions supported: 4.1
+
+Added the input file name to Closing_message.
+Used StrCol() in a different way.
+
+Note: So far, this only consumes a single file. The ENV var could contain more
+than one file name in the future. This solution will then need to be revised.
 
 # --------------------------------------------------
 # Ver: 2.3
