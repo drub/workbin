@@ -1,7 +1,7 @@
 #! /bin/bash
 
-readonly progVer="4.4"
-readonly employer="Cprime"
+readonly progVer="4.5"
+readonly employer="Internal"
 
 
 if [[ $# = 0 ]]; then
@@ -22,8 +22,8 @@ printf "%s\n" "EVENT::$progVer::$datestr::$argStr::"
 printf "%s\n"
 printf "%s\n" "Topic:: "
 printf "%s\n" "Host:: "
-printf "%s\n" "${employer} Participants:: "
-printf "%s\n" "Client Participants:: "
+printf "%s\n" "${employer} Staff:: "
+printf "%s\n" "Client Staff:: "
 printf "%s\n" "References:: "
 printf "%s\n"
 printf "%s\n"
@@ -36,6 +36,16 @@ exit	# This prevents anything following from being executed.
 ### ======================================================================
 ### History
 ### ======================================================================
+
+----------------------------------------------------------------------
+ Ver 4.5
+ 2021.10.01
+----------------------------------------------------------------------
+- Change "Cprime Participants::" to "Internal Participants::"
+  This is so I can use it in non-Cprime contexts.
+- Change "Participants" to "Staff"
+  More concise.
+
 
 ----------------------------------------------------------------------
  Ver 4.4
