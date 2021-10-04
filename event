@@ -1,6 +1,6 @@
 #! /bin/bash
 
-readonly progVer="5.0"
+readonly progVer="5.1"
 readonly employer="Internal"
 
 
@@ -19,7 +19,7 @@ timeStr=$(date "+%H.%M.%S")
 
 printf "%s\n"
 printf "%s\n" "$dashline"
-printf "%s\n" "EVENT::$progVer::$dayStr::$dateStr::$argStr::"
+printf "%s\n" "EVENT::$progVer::$dayStr::$dateStr::$timeStr::$argStr::"
 #printf "%s\n" "EVENT::$progVer::$dayStr::$datestr::\"${argSr[@]}\"::"
 #printf "%s\n" "Arg count ............... $#"    #debug
 printf "%s\n"
@@ -38,6 +38,25 @@ exit	# This prevents anything following from being executed.
 ### ======================================================================
 ### History
 ### ======================================================================
+
+----------------------------------------------------------------------
+ Ver 5.1
+ 2021.10.01
+----------------------------------------------------------------------
+- Forgot to include the $timeStr in the EVENT line. Doh!
+  Added back the $timeStr
+
+# ----------------------------------------------------------------------
+EVENT::5.1::Mon::2021-10-04::15.47.27::test test test::
+
+Topic:: 
+Host:: 
+Internal Staff:: 
+Client Staff:: 
+
+
+# ----------------------------------------------------------------------
+
 
 ----------------------------------------------------------------------
  Ver 5.0
