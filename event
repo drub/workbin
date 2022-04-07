@@ -1,6 +1,6 @@
 #! /bin/bash
 
-readonly progVer="5.1"
+readonly progVer="6.0"
 readonly employer="Internal"
 
 
@@ -11,6 +11,7 @@ else
 fi
 
 dashline="# ----------------------------------------------------------------------"
+headerEndLine="# ----------"    # 10 dashes
 
 dayStr=$(date "+%a")
 dateStr=$(date "+%Y-%m-%d")
@@ -27,6 +28,7 @@ printf "%s\n" "Topic:: "
 printf "%s\n" "Host:: "
 printf "%s\n" "${employer} Staff:: "
 printf "%s\n" "Client Staff:: "
+printf "%s\n" "$headerEndLine"
 printf "%s\n"
 printf "%s\n"
 printf "%s\n" "$dashline"
@@ -38,6 +40,31 @@ exit	# This prevents anything following from being executed.
 ### ======================================================================
 ### History
 ### ======================================================================
+
+----------------------------------------------------------------------
+ Ver 6.0
+ 2022.04.06
+----------------------------------------------------------------------
+- Add a heading section delimiter. $headerEndLine
+  Thinking of enhancing the "topics" script to output a full report of
+  events. Or output full headers, without the full event body.
+  "topics" curently only reports the Topic:: record.
+  The $headerEndLine will make parsing an event record easier. It will also
+  allow arbitrary entries in the header. There are times when additional header
+  information would be useful in generated reports.
+
+# ----------------------------------------------------------------------
+EVENT::6.0::Wed::2022-04-06::17.42.58::EVENT::
+
+Topic:: 
+Host:: 
+Internal Staff:: 
+Client Staff:: 
+# ----------
+
+
+# ----------------------------------------------------------------------
+
 
 ----------------------------------------------------------------------
  Ver 5.1
