@@ -1,0 +1,4 @@
+#! /bin/zsh
+
+grep  "\- MEET:" journal_work.txt | grep -v TIME::
+
