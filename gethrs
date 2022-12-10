@@ -28,7 +28,7 @@ HOME = os.environ['HOME'] # Use the $HOME env variable
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
      "maj_ver"        : "2", \
-     "min_ver"        : "4", \
+     "min_ver"        : "5", \
      "sep_ln_len"     : 80,    # Dashed line between displayed recs \
      "plus_ln_len"    : 50,    # Line preceeding an error message \
      "rec_4.1_tokens" : 11, \
@@ -51,7 +51,7 @@ line_counter = 0
 def Display_file_info(f_list):
 # --------------------------------------------------
 # A debug function to display files used.
-    count = 0 #debug
+    count = 0
     if isinstance(f_list, list):
         #print("++++++ Found list" ) #debug
         for fname in f_list:
@@ -206,8 +206,8 @@ def Get_Env_File(fname):
 # Main MAIN main
 # ----------------------------------------------------------------------
 
-debug = True
-debug = False
+debug = True    #debug
+debug = False   #debug
 
 print ("")
 print (prog_config["name"]  + " " + prog_config["ver"]) # Banner line.
@@ -216,8 +216,6 @@ input_file_list = Get_Env_File(prog_config["env_var"])
 
 #print("++++ " + input_file_list) #debug
 
-debug = True
-debug = False
 if debug :
     print ('++ Number of arguments ....... ', len(sys.argv))
     print ('++ Argument List:', str(sys.argv))
@@ -281,7 +279,7 @@ with open(str(input_file_list), 'r') as in_fd:
             tokens.insert(0, line_counter)
 
             debug = False
-            if debug == True :  #debug
+            if debug == True :
                 print ("+" * prog_config["SEP_LN_LEN"])
                 Display_tokens(tokens)
 
@@ -350,6 +348,13 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# gehrs Ver: 2.5
+# --------------------------------------------------
+Record versions supported: 4.1
+
+Minor cleanup
 
 # --------------------------------------------------
 # Ver: 2.4
