@@ -1,4 +1,5 @@
 #! /bin/zsh
 
-grep  "\- MEET:" journal_work.txt | grep -v TIME::
+journalFile="${HOME}/sync_synology/doc/journal/work/journal_work.txt"
+grep  "\- MEET:" "${journalFile}" | grep -v TIME::
 
