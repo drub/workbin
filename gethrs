@@ -28,13 +28,15 @@ HOME = os.environ['HOME'] # Use the $HOME env variable
 prog_config = \
     {"name"          : os.path.basename(sys.argv[0]), \
      "maj_ver"        : "2", \
-     "min_ver"        : "5", \
+     "min_ver"        : "6", \
      "sep_ln_len"     : 80,    # Dashed line between displayed recs \
      "plus_ln_len"    : 50,    # Line preceeding an error message \
      "rec_4.1_tokens" : 11, \
      "env_var"        : "GETHRSPATH", \
-     "ofname"         : HOME + "/spool/gethrs_output.csv" \
+     "ofname"         : HOME + "/sync_synology/spool/gethrs_output.csv" \
     }
+#"ofname"         : HOME + "/spool/gethrs_output.csv" \
+#/Users/thedrub/sync_synology/spool
 prog_config["ver"] = prog_config["maj_ver"] + "." + prog_config["min_ver"]
 
 # ----------------------------------------------------------------------
@@ -348,6 +350,13 @@ exit()
 # ----------------------------------------------------------------------
 # History
 # ----------------------------------------------------------------------
+
+# --------------------------------------------------
+# gethrs Ver: 2.6
+# --------------------------------------------------
+# Change destination of the output file. Keep in in a sync'd location.
+# Was $HOME/spool
+# Now $HOME/sync_synology/spool
 
 # --------------------------------------------------
 # gethrs Ver: 2.5
