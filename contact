@@ -6,7 +6,7 @@
 # Constants
 # ----------------------------------------
 readonly origIFS=$IFS
-readonly progVer="6.0"
+readonly progVer="7.0"
 readonly progName=$(basename $0)
 readonly uninitialized="UNINITIALIZED"
 readonly allRecords="FALSE"
@@ -214,38 +214,39 @@ else
 fi
 
 
+#debug="TRUE"
 IFS=:
 for searchFileName in $fileSearchList; do
 
-    if [ -f $searchFileName ]; then
-        if [ "$debug" == "TRUE" ]; then
-            printf "%s\n" "\
-** ==================== Main: $progName
+    if [ "$debug" == "TRUE" ]; then
+        printf "%s\n" "\
+** ==================== Main: $progName ====================
 ** searchFileName .................... $searchFileName
 ** searchStr ......................... $searchStr "
 file $searchFileName
             printf "%s\n" "\
-** ==================== Main
+** ==================== Main ====================
 "
 
+    fi
 
-       fi
-
-       # If the help, "-h", flag was supplied
-       if [[ "${searchStr}" = "-h" ]]; then
-           # Print each file name in the env variable.
-           printf "%s\n" "\
+    # If the help, "-h", flag was supplied
+    if [[ "${searchStr}" = "-h" ]]; then
+        # Print each file name in the env variable.
+        printf "%s\n" "\
   $searchFileName"
-       else
-           # Help flad not supplied. Perform the search on each file.
-           SearchFile "$searchFileName" "$searchStr"
-       fi
     else
-        printf "%s\n" "
+        if [[ -f "$searchFileName" ]]; then
+            # No "help" flag.. Perform the search on each file.
+            SearchFile "$searchFileName" "$searchStr"
+        else
+            printf "%s\n" "
 ERROR: A file listed in the environment variable CONTACTSPATH does not exist.
        File: $searchFileName
 "
-    fi
+        fi
+   fi
+
 done
 unset IFS
 
@@ -266,6 +267,18 @@ PrintVer
 ----------------------------------------
   History
 ----------------------------------------
+
+------------------------------------------------------------
+ Program: contact
+ Date: 2023-11-06
+ Version: 7.0
+ Compatible with CONREC record version 4.0
+------------------------------------------------------------
+- Correct the logic. V6.0 quit execution if any file listed in the 
+  ENV var does not exist.
+  V7.0 reports the missing file and continues processing the other
+  files.
+- Correct other logic errors. Remove a file test in main()
 
 ------------------------------------------------------------
  Program: contact
